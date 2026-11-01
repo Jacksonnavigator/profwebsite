@@ -89,7 +89,7 @@ else {
   );
   if (fs.existsSync("dist/sitemap.xml")) fs.unlinkSync("dist/sitemap.xml");
 }
-const profile = `THOMAS T. KIVEVELE\nAssociate Professor, Sustainable Energy Engineering\nDirector of Research and Innovation, NM-AIST\nArusha, Tanzania\nAcademic profile based on the CV dated 19 October 2026\n\nEmail: thomas.kivevele@nm-aist.ac.tz\n\nEDUCATION\n${education.map((x) => `${x.year} — ${x.degree}\n${x.school}`).join("\n\n")}\n\nCAREER\n${career.map((x) => `${x.period} — ${x.role}\n${x.org}`).join("\n\n")}\n\nPATENTS LISTED IN THE CV\n${patents.map((x) => `${x.year} — ${x.title}\n${x.number}`).join("\n\n")}\n\nSELECTED AWARDS\n${awards.map((x) => `${x.year} — ${x.title}, ${x.by}`).join("\n")}\n\nThis public academic summary intentionally excludes passport details, date of birth, family information, student identifiers and referees' personal contacts.\n`;
+const profile = `THOMAS T. KIVEVELE\nAssociate Professor, Sustainable Energy Engineering\nDirector of Research and Innovation, NM-AIST\nArusha, Tanzania\nAcademic profile\n\nEmail: thomas.kivevele@nm-aist.ac.tz\n\nEDUCATION\n${education.map((x) => `${x.year} — ${x.degree}\n${x.school}`).join("\n\n")}\n\nCAREER\n${career.map((x) => `${x.period} — ${x.role}\n${x.org}`).join("\n\n")}\n\nREGISTERED PATENTS\n${patents.map((x) => `${x.year} — ${x.title}\n${x.number}`).join("\n\n")}\n\nSELECTED AWARDS\n${awards.map((x) => `${x.year} — ${x.title}, ${x.by}`).join("\n")}\n\nThis public academic summary intentionally excludes passport details, date of birth, family information, student identifiers and referees' personal contacts.\n`;
 fs.writeFileSync("dist/academic-profile.txt", profile);
 fs.writeFileSync("public/academic-profile.txt", profile);
 fs.rmSync(".prerender", { recursive: true, force: true });

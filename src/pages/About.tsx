@@ -50,7 +50,7 @@ He joined NM-AIST as a Lecturer in February 2016 and became
             <p>
 His work spans energy research programmes supported by the World
               Bank, the European Union and other partners. This site lists 116
-              journal articles from his October 2026 CV and six registered
+              journal articles and six registered
               patents covering solar dryers, a solar vaccine cooler and a biogas
               burner assembly. He was named NM-AIST's Best Innovator of the Year
               for 2020/21 and Best Worker of 2019/2020 among academic staff.

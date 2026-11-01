@@ -78,7 +78,7 @@ export default function HeroSlider() {
           </h1>
 
           <p className="mt-7 max-w-2xl animate-rise text-lg leading-relaxed text-white/85 [animation-delay:240ms] md:text-xl">
-            An engineer, innovator and research leader whose engineering career began in 2007. His October 2026 CV lists 116 journal articles and six registered clean energy patents, with research serving farms, communities and industry across Africa.
+            An engineer, innovator and research leader whose engineering career began in 2007. His academic profile features 116 journal articles and six registered clean energy patents, with research serving farms, communities and industry across Africa.
           </p>
 
           <div className="mt-9 flex animate-rise flex-wrap gap-3 [animation-delay:360ms]">

@@ -26,7 +26,7 @@ export const stats = [
   {
     value: "116",
     label: "Journal articles listed",
-    detail: "In the publication library compiled from the October 2026 CV",
+    detail: "In the publication library",
   },
   {
     value: "2007",
@@ -604,7 +604,6 @@ export const projects = projectRecords.map((project) => {
       .replace(/^-|-$/g, ""),
   };
 });
-export const contentReviewed = "19 October 2026";
 export const patents = [
   {
     year: 2024,
