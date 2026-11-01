@@ -1,0 +1,8 @@
+{
+  "checks": "Not run after the project detail, full photo grid, CV data, or full-screen viewer updates.",
+  "visual_review": "Five routes reviewed at desktop and 390px mobile, including individual portraits, group context, project images and hero slide variants.",
+  "deployment": "Not deployed. Set real SITE_URL and rebuild before publishing.",
+  "images": "All 237 photos from four supplied project folders are shown in their matching detail-page grids. Each is available as 480px, 960px and 1600px WebP for grid and full-screen viewing.",
+  "project_detail_pages": "Every project card links to a route with CV-sourced description, value, period and achievements. Four full matching photo grids are populated; a sticky left gallery companion shows the active photo and navigation progress. Photos open in a full-screen viewer. Other records show the no-matching-photo note.",
+  "project_identity": "Second dryer is shown on the solar-biogas project detail page with a generic caption and is not identified as the same model as the primary unit. PASET kickoff imagery is labeled as an event, not cooler equipment."
+}

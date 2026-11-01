@@ -1,0 +1,27 @@
+{
+  "baseline": "Originally supplied website source, not intermediate corrected ZIP",
+  "theme_files_byte_identical": [
+    "tailwind.config.js",
+    "src/index.css"
+  ],
+  "original_class_attributes_match": [
+    "About.tsx",
+    "Contact.tsx",
+    "Home.tsx",
+    "Projects.tsx",
+    "Publications.tsx",
+    "Footer.tsx",
+    "Header.tsx",
+    "HeroSlider.tsx",
+    "Logo.tsx",
+    "PageBanner.tsx",
+    "PublicationCard.tsx",
+    "SectionHeading.tsx"
+  ],
+  "fonts": [
+    "Fraunces",
+    "Plus Jakarta Sans"
+  ],
+  "font_delivery": "Exact Google Fonts definitions, self-hosted WOFF2; OFL licenses included",
+  "exceptions": "ContactForm border state fix/required labels/mail-draft wording; Photo robust srcset/fallback/framing; corrected content and links. No added layout blocks."
+}
