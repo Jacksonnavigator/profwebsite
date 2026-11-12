@@ -3,10 +3,10 @@ import type { Photo } from "./images";
 export type ProjectAlbumImage = { photo: Photo; caption?: string };
 const projectPhoto = (project: string, number: number, alt: string): Photo => ({
   src: (width) => `/images/projects/${project}/${String(number).padStart(3, "0")}-${width <= 480 ? 480 : width <= 960 ? 960 : 1600}.webp`,
-  alt,
+  alt: alt.replace(/(?: project)? photograph \d+$/i, " project image").replace(/ project project image$/i, " project image"),
 });
 
-export const projectPhotos: Record<string, ProjectAlbumImage[]> = {
+const projectPhotoAlbums: Record<string, ProjectAlbumImage[]> = {
   "solar-biogas-hybrid-dryer-for-agricultural-products": [
     { photo: projectPhoto("solar-biogas-hybrid-dryer-for-agricultural-products", 1, "Solar-biogas hybrid dryer project photograph 1") },
     { photo: projectPhoto("solar-biogas-hybrid-dryer-for-agricultural-products", 2, "Solar-biogas hybrid dryer project photograph 2") },
@@ -253,3 +253,54 @@ export const projectPhotos: Record<string, ProjectAlbumImage[]> = {
     { photo: projectPhoto("solar-powered-cooler-for-vaccines-and-perishable-food-in-remote-areas", 38, "Solar-powered cooler project project photograph 38") },
   ],
 };
+
+const galleryDescriptions: Record<string, { through: number; alt: string; caption: string }[]> = {
+  "solar-assisted-heat-pump-dryer-with-energy-storage": [
+    { through: 3, alt: "Researcher speaking at a seminar podium", caption: "A researcher presents project work." },
+    { through: 11, alt: "Participants listening and discussing during project meetings", caption: "Participants meet and discuss project work." },
+    { through: 21, alt: "Researchers sharing work during seminars and discussions", caption: "Researchers and participants exchange project updates." },
+    { through: 29, alt: "Researchers and partners at NM-AIST project events", caption: "Project partners gather at NM-AIST events." },
+    { through: 47, alt: "Project participants discussing equipment during a workshop", caption: "Participants discuss project activities and equipment." },
+    { through: 62, alt: "Researchers and partners inspecting equipment and demonstrating project work", caption: "Researchers inspect equipment and exchange ideas." },
+    { through: 80, alt: "Researchers demonstrating practical project work to participants", caption: "Researchers share practical project work with participants." },
+  ],
+  "solar-biogas-hybrid-dryer-for-agricultural-products": [
+    { through: 6, alt: "Solar-assisted dryer prototype photographed outdoors", caption: "Views of the dryer prototype at its test site." },
+    { through: 13, alt: "Researchers and partners at project meetings and presentations", caption: "Researchers and partners meet to discuss the project." },
+    { through: 37, alt: "Solar dryer prototype with solar collector and drying chamber", caption: "Views of the solar collector and drying chamber." },
+    { through: 46, alt: "Researchers inspecting and discussing the dryer prototype", caption: "Researchers inspect and discuss the equipment." },
+    { through: 47, alt: "Samples of dried produce displayed beside project equipment", caption: "Dried produce samples from project activities." },
+    { through: 49, alt: "Solar dryer prototype photographed at the project site", caption: "Further views of the dryer at the project site." },
+  ],
+  "solar-dryer-integrated-with-energy-storage-for-drying-biomaterials": [
+    { through: 5, alt: "Researchers and partners seated at a meeting table", caption: "Project partners meet and review the work." },
+    { through: 14, alt: "Researchers and partners discussing work during a meeting", caption: "Participants discuss project activities." },
+    { through: 19, alt: "Group photograph outside NM-AIST", caption: "Project participants gather outside NM-AIST." },
+    { through: 46, alt: "Researchers attending a project meeting or presentation", caption: "Researchers share updates and discuss project work." },
+    { through: 70, alt: "Researchers and partners exchanging views in a meeting", caption: "Project partners exchange ideas and review progress." },
+  ],
+  "solar-powered-cooler-for-vaccines-and-perishable-food-in-remote-areas": [
+    { through: 4, alt: "Panelists seated at a project event table", caption: "Researchers take part in a project event." },
+    { through: 12, alt: "Audience listening during a project presentation", caption: "Participants attend a project presentation." },
+    { through: 25, alt: "Speaker presenting project research to an audience", caption: "A researcher shares project findings." },
+    { through: 34, alt: "Group photograph of project event participants", caption: "Researchers and participants gather at a project event." },
+    { through: 38, alt: "Audience attending a project event", caption: "Participants attend a project event." },
+  ],
+};
+
+export const projectPhotos: Record<string, ProjectAlbumImage[]> = Object.fromEntries(
+  Object.entries(projectPhotoAlbums).map(([projectId, photos]) => {
+    let descriptionIndex = 0;
+    const described = photos.map((item, index) => {
+      const descriptions = galleryDescriptions[projectId] ?? [];
+      while (descriptionIndex < descriptions.length - 1 && index + 1 > descriptions[descriptionIndex].through) descriptionIndex += 1;
+      const description = descriptions[descriptionIndex];
+      return {
+        ...item,
+        photo: { ...item.photo, alt: description.alt },
+        caption: `${description.caption} Photo ${index + 1} of ${photos.length}.`,
+      };
+    });
+    return [projectId, described];
+  }),
+);

@@ -1,17 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, FlaskConical, GraduationCap, Landmark, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, FlaskConical, GraduationCap, Landmark, Mail, MapPin, Pause, Phone, Play } from "lucide-react";
 import HeroSlider from "../components/HeroSlider";
 import Photo from "../components/Photo";
 import SectionHeading from "../components/SectionHeading";
 import PublicationCard from "../components/PublicationCard";
 import ContactForm from "../components/ContactForm";
 import { photos } from "../data/images";
-import { awards, contact, impact, innovations, journey, partners, stats, innovationLink } from "../data/site";
+import { awards, contact, impact, innovations, journey, partners, projects, stats, innovationLink } from "../data/site";
 import { publications } from "../data/publications";
 
 const impactIcons = { flask: FlaskConical, graduation: GraduationCap, landmark: Landmark } as const;
+const statDetails: Record<string, { to: string; label: string }> = {
+  "Journal articles listed": { to: "/publications", label: "Browse publications" },
+  "Engineering career began": { to: "/about#career", label: "See career history" },
+  "Registered patents": { to: "/about#patents", label: "View patent details" },
+  "Research projects listed": { to: "/projects", label: "Browse the project list" },
+};
 
 export default function Home() {
+  const [partnersPaused, setPartnersPaused] = useState(false);
+  const [partnersInteracting, setPartnersInteracting] = useState(false);
   const latest = publications.filter((p) => p.type === "Journal article" && p.doi).slice(0, 6);
 
   return (
@@ -28,11 +37,14 @@ export default function Home() {
 
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((s) => (
-              <div key={s.label} className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1">
+              <div key={s.label} className="group relative flex flex-col items-start overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1">
                 <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-solar-100 transition-transform duration-500 group-hover:scale-125" aria-hidden="true" />
-                <p className="relative font-display text-5xl font-semibold text-teal-600">{s.value}</p>
+                <p className="relative font-display text-5xl font-semibold text-teal-600">{s.label === "Research projects listed" ? projects.length : s.value}</p>
                 <p className="relative mt-3 text-lg font-semibold text-ink">{s.label}</p>
                 <p className="relative mt-2 text-[15px] leading-relaxed text-slate-600">{s.detail}</p>
+                <Link to={statDetails[s.label].to} className="relative mt-5 inline-flex min-h-11 items-center font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:text-solar-600">
+                  {statDetails[s.label].label} <ArrowRight size={16} className="ml-2" aria-hidden="true" />
+                </Link>
               </div>
             ))}
           </div>
@@ -69,6 +81,7 @@ export default function Home() {
                 </li>
               ))}
             </ol>
+            <Link to="/about#career" className="btn-outline mt-8">Read the full career history <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -157,16 +170,25 @@ export default function Home() {
               <li key={a.title} className="border-t-2 border-solar pt-5">
                 {a.image && <img src={a.image} alt={a.imageAlt} className="mb-5 aspect-[4/3] w-full rounded-xl object-cover object-center" loading="lazy" />}
                 <p className="font-display text-2xl font-semibold text-solar-400">{a.year}</p>
-                <p className="mt-2 text-lg font-semibold leading-snug">{a.title}</p>
+                {a.sourceUrl ? <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-start gap-2 text-lg font-semibold leading-snug underline decoration-solar/70 underline-offset-4 hover:text-solar-400">{a.title}<ArrowRight size={16} className="mt-1 shrink-0" aria-hidden="true" /></a> : <p className="mt-2 text-lg font-semibold leading-snug">{a.title}</p>}
                 <p className="mt-1 text-sm text-white/75">{a.by}</p>
               </li>
             ))}
           </ul>
+          <a href="https://nm-aist.ac.tz/teams/prof-thomas-kivevele/" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-11 items-center font-semibold text-white underline decoration-solar underline-offset-4 hover:text-solar-400">
+            View the NM-AIST staff profile <ArrowRight size={17} className="ml-2" aria-hidden="true" />
+          </a>
         </div>
-        <div className="mt-16 overflow-hidden border-y border-white/15 py-6" aria-label="Funders and partners">
-          <ul className="flex w-max animate-marquee gap-12 whitespace-nowrap font-display text-2xl font-semibold text-white/80 hover:[animation-play-state:paused]">
+        <div className="mt-16 overflow-hidden border-y border-white/15 py-6" aria-label="Funders and partners" onMouseEnter={() => setPartnersInteracting(true)} onMouseLeave={() => setPartnersInteracting(false)} onFocusCapture={() => setPartnersInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPartnersInteracting(false); }}>
+          <div className="container-site mb-4 flex justify-end">
+            <button type="button" onClick={() => setPartnersPaused((value) => !value)} aria-pressed={partnersPaused} className="btn min-h-10 border border-white/50 px-4 text-sm text-white hover:bg-white/10">
+              {partnersPaused ? <Play size={16} aria-hidden="true" /> : <Pause size={16} aria-hidden="true" />}
+              {partnersPaused ? "Resume partner list" : "Pause partner list"}
+            </button>
+          </div>
+          <ul className="flex w-max animate-marquee gap-12 whitespace-nowrap font-display text-2xl font-semibold text-white/80" style={{ animationPlayState: partnersPaused || partnersInteracting ? "paused" : "running" }}>
             {[...partners, ...partners].map((p, i) => (
-              <li key={i} aria-hidden={i >= partners.length} className="flex items-center gap-12">
+              <li key={i} aria-hidden={i >= partners.length} className={`flex items-center gap-12 ${i >= partners.length ? "motion-reduce:hidden" : ""}`}>
                 {p}
                 <span className="h-2 w-2 rounded-full bg-solar" aria-hidden="true" />
               </li>
@@ -179,8 +201,8 @@ export default function Home() {
       <section className="section bg-white">
         <div className="container-site">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <SectionHeading kicker="Latest research" title="Recent publications">
-              New findings from his group, published in peer-reviewed international journals.
+            <SectionHeading kicker="Latest research" title="Recent journal articles">
+              Six DOI-linked articles from the latest publication years represented in this library, ordered by year.
             </SectionHeading>
             <Link to="/publications" className="btn-outline shrink-0">
               Browse all {publications.length} publications <ArrowRight size={18} aria-hidden="true" />

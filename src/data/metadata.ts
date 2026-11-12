@@ -18,7 +18,7 @@ export const metadata: Record<string, { title: string; description: string }> =
     "/publications": {
       title: "Publications | Thomas T. Kivevele",
       description:
-        "Search 133 CV-listed research outputs, including 116 journal articles, with year and type filters, original citations and BibTeX export.",
+        "Search 133 research outputs, including 116 journal articles, with year and type filters and links to papers where available.",
     },
     "/contact": {
       title: "Contact | Thomas T. Kivevele",

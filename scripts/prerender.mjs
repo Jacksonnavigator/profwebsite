@@ -8,6 +8,8 @@ import {
   education,
   awards,
   patents,
+  projects,
+  projectPhotos,
 } from "../.prerender/prerender-entry.js";
 const template = fs.readFileSync("dist/index.html", "utf8");
 const siteInput = process.env.SITE_URL || process.env.VITE_SITE_URL;
@@ -31,8 +33,21 @@ const escape = (s) =>
     .replaceAll('"', "&quot;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
-for (const route of [...Object.keys(metadata), "/404"]) {
-  const info = metadata[route] || missingMetadata;
+const projectRoutes = projects.map((project) => ({
+  route: `/projects/${project.id}`,
+  info: {
+    title: `${project.title} | Research Projects | Thomas T. Kivevele`,
+    description: `${project.title}. Funder: ${project.funder}. Project period: ${project.years}.`,
+  },
+}));
+const routes = [
+  ...Object.keys(metadata).map((route) => ({ route, info: metadata[route] })),
+  ...projectRoutes,
+  { route: "/404", info: missingMetadata },
+];
+for (const { route, info } of routes) {
+  const routeProject = projects.find((project) => route === `/projects/${project.id}`);
+  const leadPhoto = routeProject ? projectPhotos[routeProject.id ?? ""]?.[0]?.photo : undefined;
   let html = template
     .replace(/<title>.*?<\/title>/, `<title>${escape(info.title)}</title>`)
     .replace(
@@ -43,7 +58,9 @@ for (const route of [...Object.keys(metadata), "/404"]) {
   const url = origin
     ? new URL(route === "/" ? "/" : `${route}/`, origin).href
     : "";
-  const image = origin ? `${origin}/social-preview.png` : "/social-preview.png";
+  const imagePath = leadPhoto?.src(960) || "/social-preview.png";
+  const image = origin ? new URL(imagePath, origin).href : imagePath;
+  const imageAlt = leadPhoto?.alt || "Thomas T. Kivevele, Sustainable Energy Engineering";
   const schema = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -56,7 +73,21 @@ for (const route of [...Object.keys(metadata), "/404"]) {
     },
     ...(url ? { url } : {}),
   };
-  const extras = `<meta name="robots" content="${route === "/404" ? "noindex,follow" : "index,follow"}" />\n<meta property="og:title" content="${escape(info.title)}" />\n<meta property="og:description" content="${escape(info.description)}" />\n<meta property="og:type" content="website" />\n<meta property="og:image" content="${image}" />\n<meta property="og:image:alt" content="Thomas T. Kivevele — Sustainable Energy Engineering" />\n<meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />\n<meta name="twitter:card" content="summary_large_image" />\n<meta name="twitter:title" content="${escape(info.title)}" />\n<meta name="twitter:description" content="${escape(info.description)}" />\n<meta name="twitter:image" content="${image}" />\n${url ? `<link rel="canonical" href="${url}" /><meta property="og:url" content="${url}" />` : ""}\n${route === "/" || route === "/about" ? `<script type="application/ld+json" data-profile-schema>${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>` : ""}`;
+  const extras = [
+    `<meta name="robots" content="${route === "/404" ? "noindex,follow" : "index,follow"}" />`,
+    `<meta property="og:title" content="${escape(info.title)}" />`,
+    `<meta property="og:description" content="${escape(info.description)}" />`,
+    `<meta property="og:type" content="${routeProject ? "article" : "website"}" />`,
+    `<meta property="og:image" content="${image}" />`,
+    `<meta property="og:image:alt" content="${escape(imageAlt)}" />`,
+    ...(routeProject ? [] : ['<meta property="og:image:width" content="1200" />', '<meta property="og:image:height" content="630" />']),
+    '<meta name="twitter:card" content="summary_large_image" />',
+    `<meta name="twitter:title" content="${escape(info.title)}" />`,
+    `<meta name="twitter:description" content="${escape(info.description)}" />`,
+    `<meta name="twitter:image" content="${image}" />`,
+    ...(url ? [`<link rel="canonical" href="${url}" />`, `<meta property="og:url" content="${url}" />`] : []),
+    ...(route === "/" || route === "/about" ? [`<script type="application/ld+json" data-profile-schema>${JSON.stringify(schema).replaceAll("<", "\\u003c")}</script>`] : []),
+  ].join("\n");
   html = html.replace("</head>", `${extras}\n</head>`);
   const file =
     route === "/"
@@ -74,11 +105,10 @@ fs.writeFileSync(
 if (origin)
   fs.writeFileSync(
     "dist/sitemap.xml",
-    `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${Object.keys(
-      metadata,
-    )
+    `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes
+      .filter(({ route }) => route !== "/404")
       .map(
-        (route) =>
+        ({ route }) =>
           `<url><loc>${origin}${route === "/" ? "/" : `${route}/`}</loc></url>`,
       )
       .join("")}</urlset>`,
@@ -93,6 +123,6 @@ const profile = `THOMAS T. KIVEVELE\nAssociate Professor, Sustainable Energy Eng
 fs.writeFileSync("dist/academic-profile.txt", profile);
 fs.writeFileSync("public/academic-profile.txt", profile);
 fs.rmSync(".prerender", { recursive: true, force: true });
-console.log(
-  `Prerendered ${Object.keys(metadata).length} routes and 404; created public academic profile.`,
+  console.log(
+  `Prerendered ${Object.keys(metadata).length + projects.length} routes and 404; created public academic profile.`,
 );

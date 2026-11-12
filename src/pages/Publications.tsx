@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search } from "lucide-react";
+import { ArrowDownToLine, ArrowUpRight, Search } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 import { Authors } from "../components/PublicationCard";
 import { photos } from "../data/images";
-import { publications } from "../data/publications";
+import { bibtex, publications } from "../data/publications";
 
 const years = Array.from(new Set(publications.map((p) => p.year))).sort((a, b) => b - a);
 const types = Array.from(new Set(publications.map((p) => p.type)));
@@ -21,6 +21,15 @@ export default function Publications() {
   }, [q, year, type]);
 
   const clear = () => { setQ(""); setYear(""); setType(""); };
+  const exportBibtex = () => {
+    const blob = new Blob([bibtex(shown)], { type: "application/x-bibtex;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "thomas-kivevele-publications.bib";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
   const field = "mt-2 block min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-base focus:border-teal-500 focus:outline-none focus:ring-4 focus:ring-teal-100";
 
   return (
@@ -56,9 +65,10 @@ export default function Publications() {
             </div>
           </div>
 
-          <p className="mt-8 text-sm font-semibold text-slate-600" aria-live="polite">
-            Showing {shown.length} of {publications.length} publications
-          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-slate-600" aria-live="polite">Showing {shown.length} of {publications.length} publications</p>
+            <button type="button" onClick={exportBibtex} disabled={!shown.length} className="btn-outline inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-50"><ArrowDownToLine size={17} aria-hidden="true" /> Export filtered BibTeX</button>
+          </div>
 
           {shown.length === 0 ? (
             <div className="mt-6 rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center">
@@ -78,11 +88,11 @@ export default function Publications() {
                       <p className="mt-2 text-sm text-slate-500"><Authors text={authors} /></p>
                       <p className="mt-3 text-sm font-semibold text-teal-600">{p.type}</p>
                     </div>
-                    {p.doi && (
-                      <a href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 self-start whitespace-nowrap text-sm font-semibold text-teal-600 hover:text-solar-600">
-                        Read the paper <ArrowUpRight size={16} aria-hidden="true" />
-                      </a>
-                    )}
+                    <div className="self-start">
+                      {p.doi ? <a href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-semibold text-teal-600 hover:text-solar-600">Read the paper <ArrowUpRight size={16} aria-hidden="true" /></a>
+                        : p.url ? <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-semibold text-teal-600 hover:text-solar-600">View record <ArrowUpRight size={16} aria-hidden="true" /></a>
+                          : <a href={`https://scholar.google.com/scholar?q=${encodeURIComponent(p.title)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 whitespace-nowrap text-sm font-semibold text-teal-600 hover:text-solar-600">Search Google Scholar <ArrowUpRight size={16} aria-hidden="true" /></a>}
+                    </div>
                   </li>
                 );
               })}

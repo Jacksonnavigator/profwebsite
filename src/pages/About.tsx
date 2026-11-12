@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
-import { Award, BadgeCheck, Mic } from "lucide-react";
+import { BadgeCheck, ExternalLink, Mic } from "lucide-react";
 import PageBanner from "../components/PageBanner";
 import Photo from "../components/Photo";
 import SectionHeading from "../components/SectionHeading";
 import { photos } from "../data/images";
-import { awards, career, education, service, talks } from "../data/site";
+import { career, education, patents, service, talks } from "../data/site";
+
+const institutionalLinks = [
+  { label: "NM-AIST staff profile", href: "https://nm-aist.ac.tz/teams/prof-thomas-kivevele/" },
+  { label: "Research and Innovation Directorate", href: "https://nm-aist.ac.tz/the-nelson-mandela-african-institution-of-science-and-technology-nm-aist/directorates/research-and-innovation/" },
+  { label: "Google Scholar publication profile", href: "https://scholar.google.com/citations?user=HrpWQEAAAAAJ&hl=en" },
+];
 
 export default function About() {
   return (
@@ -14,7 +20,7 @@ export default function About() {
         African Institution of Science and Technology in Arusha, Tanzania.
       </PageBanner>
 
-      <section className="section bg-white">
+      <section id="biography" className="section scroll-mt-24 bg-white">
         <div className="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <div className="overflow-hidden rounded-[2rem] bg-teal-600 shadow-lift">
@@ -27,6 +33,19 @@ export default function About() {
                 </li>
               ))}
             </ul>
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-paper p-6">
+              <h2 className="font-sans text-base font-semibold text-ink">Institutional and research profiles</h2>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">Verify current appointments, institutional roles and indexed publications through these profiles.</p>
+              <ul className="mt-4 space-y-3">
+                {institutionalLinks.map((item) => (
+                  <li key={item.href}>
+                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:text-solar-600">
+                      {item.label}<ExternalLink size={15} aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="max-w-2xl space-y-5 text-lg leading-relaxed text-slate-600">
@@ -66,6 +85,17 @@ His consultancies include energy-efficient irrigation for the
         </div>
       </section>
 
+      <section id="supervision" className="section scroll-mt-24 bg-paper">
+        <div className="container-site grid gap-8 rounded-3xl bg-white p-8 shadow-card md:grid-cols-[1fr_auto] md:items-center md:p-12">
+          <div>
+            <SectionHeading kicker="Student supervision" title="Supporting graduate researchers">
+              Graduate supervision is available in sustainable energy research. Prospective students should confirm current openings and programme requirements directly with NM-AIST. Student names and personal records are not published here.
+            </SectionHeading>
+          </div>
+          <a href={institutionalLinks[0].href} target="_blank" rel="noopener noreferrer" className="btn-outline">NM-AIST staff profile <ExternalLink size={16} aria-hidden="true" /></a>
+        </div>
+      </section>
+
       <section className="section bg-paper">
         <div className="container-site grid gap-14 lg:grid-cols-2">
           <div>
@@ -80,7 +110,7 @@ His consultancies include energy-efficient irrigation for the
               ))}
             </ol>
           </div>
-          <div>
+          <div id="career" className="scroll-mt-24">
             <SectionHeading kicker="Career" title="Professional experience" />
             <ol className="relative mt-10 space-y-7 border-l-2 border-teal-100 pl-8">
               {career.map((c) => (
@@ -92,6 +122,7 @@ His consultancies include energy-efficient irrigation for the
                 </li>
               ))}
             </ol>
+            <p className="mt-6 text-sm leading-relaxed text-slate-500">For the current director role and institutional listing, see the <a href={institutionalLinks[1].href} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:text-solar-600">NM-AIST Research and Innovation Directorate</a>.</p>
           </div>
         </div>
       </section>
@@ -107,10 +138,11 @@ His consultancies include energy-efficient irrigation for the
               </li>
             ))}
           </ul>
+          <p className="mt-6 text-sm leading-relaxed text-slate-500">Selected consultancy and project records are also listed on the <a href={institutionalLinks[0].href} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:text-solar-600">NM-AIST institutional profile</a>.</p>
         </div>
       </section>
 
-      <section className="section bg-ink text-white">
+      <section id="patents" className="section scroll-mt-24 bg-ink text-white">
         <div className="container-site grid gap-14 lg:grid-cols-2">
           <div>
             <SectionHeading kicker="Speaking" title="Keynotes and invited lectures" light />
@@ -127,20 +159,20 @@ His consultancies include energy-efficient irrigation for the
             </ul>
           </div>
           <div>
-            <SectionHeading kicker="Awards" title="Recognition" light />
-            <ul className="mt-10 space-y-5">
-              {awards.map((a) => (
-                <li key={a.title} className="flex gap-4 rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-                  {a.image && <img src={a.image} alt={a.imageAlt} className="h-24 w-32 shrink-0 rounded-lg object-cover" loading="lazy" />}
-                  <Award size={22} className="mt-1 shrink-0 text-solar" aria-hidden="true" />
-                  <div>
-                    <p className="text-lg font-semibold">{a.title}</p>
-                    <p className="mt-1 text-sm text-white/65">{a.by}, {a.year}</p>
-                  </div>
+            <SectionHeading kicker="Intellectual property" title="Registered patents" light>
+              Six registered technologies developed for energy access, agricultural processing and sustainable materials.
+            </SectionHeading>
+            <ol className="mt-10 space-y-4">
+              {patents.map((patent) => (
+                <li key={patent.number} className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
+                  <p className="text-sm font-semibold text-solar-400">{patent.year} · {patent.number}</p>
+                  <h3 className="mt-2 text-lg font-semibold leading-snug">{patent.title}</h3>
+                  <a href="https://bos.brela.go.tz/" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline decoration-solar underline-offset-4 hover:text-solar-400">Look up this patent number in the BRELA portal <ExternalLink size={14} aria-hidden="true" /></a>
                 </li>
               ))}
-            </ul>
-            <Link to="/contact" className="btn-solar mt-10">Invite him to speak</Link>
+            </ol>
+            <Link to="/projects" className="btn-ghost-light mt-8">Explore the related research projects</Link>
+            <Link to="/contact" className="btn-solar mt-4">Invite him to speak</Link>
           </div>
         </div>
       </section>

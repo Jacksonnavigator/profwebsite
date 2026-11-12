@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build && vite build --ssr scripts/prerender-entry.tsx --outDir .prerender && node scripts/prerender.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "lint": "eslint src scripts tests playwright.config.ts",
+    "lint": "eslint src api scripts tests playwright.config.ts",
     "test": "playwright test",
     "test:report": "playwright show-report",
     "validate": "npm run typecheck && npm run lint && npm run build && npm test",

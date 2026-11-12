@@ -41,9 +41,9 @@ export const stats = [
       "Solar dryers, a vaccine cooler, a biogas burner and a low-carbon cement",
   },
   {
-    value: "48",
-    label: "MSc and PhD students supervised",
-    detail: "19 MSc and 29 PhD students, including completed and ongoing work",
+    value: "20",
+    label: "Research projects listed",
+    detail: "Projects across energy research, education, policy and consultancy",
   },
 ];
 
@@ -148,7 +148,7 @@ export const impact = [
     tagline: "Training the engineers who will power the continent",
     body: "He has taught at university level since 2013 in Tanzania and South Africa, coordinates the MSc and PhD programmes in Sustainable Energy Science and Engineering, and examines for institutions in Tanzania, Kenya and South Africa.",
     points: [
-      "19 MSc and 29 PhD students supervised, including ongoing work",
+      "Graduate supervision in sustainable energy research",
       "Renewable and solar energy courses",
       "External examiner in Tanzania, Kenya and South Africa",
       "STEM mentoring for Arusha schools",
@@ -178,11 +178,13 @@ export type Project = {
   funder: string;
   value: string;
   years: string;
-  running: boolean;
+  status: "upcoming" | "scheduled" | "ended" | "review";
   outcomes: string[];
 };
 
-const projectRecords: Project[] = [
+type ProjectRecord = Omit<Project, "id" | "status">;
+
+const projectRecords: ProjectRecord[] = [
   {
     title:
       "LEAP-ENERGY PLUS: long-term AU–EU research and innovation partnership on renewable energy",
@@ -190,7 +192,6 @@ const projectRecords: Project[] = [
     funder: "EU Horizon Europe",
     value: "€4.0M total (NM-AIST €206,938)",
     years: "2026–2030",
-    running: true,
     outcomes: [
       "Stronger AU–EU collaboration on deploying renewable energy",
       "Skills development in sustainable renewable energy",
@@ -204,7 +205,6 @@ const projectRecords: Project[] = [
     funder: "EU Erasmus+",
     value: "€799,759 total (NM-AIST €75,815)",
     years: "2025–2028",
-    running: true,
     outcomes: [
       "Modernised solar PV teaching with research and entrepreneurship",
       "Staff exchanges between Africa and Europe",
@@ -218,7 +218,6 @@ const projectRecords: Project[] = [
     funder: "u'GOOD (Fondation Botnar, NRF and HSRC)",
     value: "US$200,000",
     years: "2025–2028",
-    running: true,
     outcomes: [
       "100+ marginalised youths trained in clean energy technologies",
       "A Tanzania Youth Climate Change Network and school climate clubs",
@@ -232,7 +231,6 @@ const projectRecords: Project[] = [
     funder: "TWAS",
     value: "US$33,950",
     years: "2025–2026",
-    running: true,
     outcomes: [
       "UV-Vis spectrophotometer and portable syngas analyser for the lab",
     ],
@@ -244,7 +242,6 @@ const projectRecords: Project[] = [
     funder: "CNRS-Africa JRP, France",
     value: "€179,500",
     years: "2023–2027",
-    running: true,
     outcomes: [
       "Bringing 20 idle biogas digesters in Meru District back into use",
       "Research support for one MSc student",
@@ -256,7 +253,6 @@ const projectRecords: Project[] = [
     funder: "EU ARISE, African Academy of Sciences",
     value: "€400,000",
     years: "2022–2027",
-    running: true,
     outcomes: [
       "Patented hybrid dryer (TZ/P/2024/000032)",
       "Full scholarships for 4 MSc and 3 PhD students",
@@ -270,7 +266,6 @@ const projectRecords: Project[] = [
     funder: "EPFL and UM6P, Excellence in Africa",
     value: "CHF 458,940",
     years: "2021–2027",
-    running: true,
     outcomes: [
       "Full scholarships for 4 PhD students with research stays at EPFL",
       "Catalysts that upgrade vegetable oils to bio-jet-like fuel",
@@ -283,7 +278,6 @@ const projectRecords: Project[] = [
     funder: "UNIDO",
     value: "US$75,580",
     years: "Jul 2025–Feb 2026",
-    running: false,
     outcomes: [
       "Value chain mapping and market analysis",
       "Business models for rice husk briquettes and bioenergy",
@@ -296,7 +290,6 @@ const projectRecords: Project[] = [
     funder: "UNIDO",
     value: "US$75,000",
     years: "Oct 2024–Apr 2025",
-    running: false,
     outcomes: ["Workshops for policymakers, regulators, developers and banks"],
   },
   {
@@ -306,7 +299,6 @@ const projectRecords: Project[] = [
     funder: "PASET RSIF",
     value: "US$84,000",
     years: "2022–2024",
-    running: false,
     outcomes: [
       "Research prototype reported to reach −10 °C; application-specific storage conditions require validation (patent TZ/P/2024/00096)",
       "Awareness reaching 100+ stakeholders",
@@ -318,7 +310,6 @@ const projectRecords: Project[] = [
     funder: "US National Academies (PEER)",
     value: "US$136,916",
     years: "2021–2023",
-    running: false,
     outcomes: [
       "Patented dryer (TZ/P/2023/000088) installed at TAHA, Tengeru",
       "Two articles in ACS Omega",
@@ -330,7 +321,6 @@ const projectRecords: Project[] = [
     funder: "PASET RSIF",
     value: "US$81,133",
     years: "2020–2023",
-    running: false,
     outcomes: ["Patent TZ/P/2023/000093", "Three Web of Science articles"],
   },
   {
@@ -339,7 +329,6 @@ const projectRecords: Project[] = [
     funder: "EU Horizon 2020",
     value: "€194,000",
     years: "2020–2024",
-    running: false,
     outcomes: [
       "A seaweed-based method that stops crops taking up fluoride from soil",
     ],
@@ -350,7 +339,6 @@ const projectRecords: Project[] = [
     funder: "European Commission",
     value: "13 exchanges, €57,104",
     years: "Aug 2020–Jul 2023",
-    running: false,
     outcomes: [
       "Thirteen staff and student exchanges between Tanzania and Germany",
     ],
@@ -362,7 +350,6 @@ const projectRecords: Project[] = [
     funder: "European Commission",
     value: "11 exchanges, €35,000",
     years: "2019–2022",
-    running: false,
     outcomes: [
       "Eleven staff and student exchanges between Tanzania and Hungary",
     ],
@@ -373,7 +360,6 @@ const projectRecords: Project[] = [
     funder: "COSTECH",
     value: "TZS 100,947,000",
     years: "2019–2021",
-    running: false,
     outcomes: ["Demonstrations for 200+ people in Arusha, Mafinga and Tabora"],
   },
   {
@@ -383,7 +369,6 @@ const projectRecords: Project[] = [
     funder: "TWAS",
     value: "US$40,915",
     years: "2018–2019",
-    running: false,
     outcomes: [
       "Partial scholarships for two MSc students who graduated in 2019",
       "Evaluated water hyacinth for bioethanol and bioethanol gel",
@@ -396,7 +381,6 @@ const projectRecords: Project[] = [
     funder: "IAEA, with TAEC",
     value: "€334,080",
     years: "2018–2019",
-    running: false,
     outcomes: ["Three accredited MSc programmes in nuclear science"],
   },
   {
@@ -405,7 +389,6 @@ const projectRecords: Project[] = [
     funder: "World Bank ACE II",
     value: "US$6.0M centre budget",
     years: "2016–2022",
-    running: false,
     outcomes: [
       "German AQAS accreditation that brought US$300,000 to the centre",
     ],
@@ -416,7 +399,6 @@ const projectRecords: Project[] = [
     funder: "EU Erasmus+",
     value: "€882,397 total (NM-AIST €131,845)",
     years: "2016–2019",
-    running: false,
     outcomes: [
       "Smart grids added to the MSc and PhD programmes",
       "Founded what is now the Sustainable Energy Lab",
@@ -426,11 +408,12 @@ const projectRecords: Project[] = [
 
 export const awards = [
   {
-    year: "2025/26",
-    title: "Research Excellence Award",
-    by: "Ministry of Education, Science and Technology",
+    year: "2023/24",
+    title: "Two research papers receive the Research Excellence Award",
+    by: "Tanzanian Ministry of Education, Science and Technology",
+    sourceUrl: "https://actu.epfl.ch/news/the-exaf-jfd-project-receives-an-award-in-tanzania/",
     image: "/images/authentic/research-excellence-award.png",
-    imageAlt: "Thomas Kivevele receiving the Research Excellence Award on stage",
+    imageAlt: "Thomas Kivevele receiving a certificate at an award event",
   },
   { year: "2020/21", title: "Best Innovator of the Year", by: "NM-AIST" },
   { year: "2019/20", title: "Best Worker, academic staff", by: "NM-AIST" },
@@ -592,11 +575,65 @@ const projectMatchText = (value: string) => value
   .replace(/[^a-z0-9]+/g, " ")
   .trim();
 
+const projectDateRange = (period: string): { start: { year: number; month: number }; end: { year: number; month: number } } | null => {
+  const numericDates = [...period.matchAll(/\b\d{1,2}\.(\d{1,2})\.(20\d{2})\b/g)];
+  const parseNumericDate = (date: RegExpMatchArray) => ({ year: Number(date[2]), month: Number(date[1]) - 1 });
+  const firstNumericDate = numericDates[0];
+  const lastNumericDate = numericDates[numericDates.length - 1];
+
+  const monthNames: Record<string, number> = {
+    jan: 0, january: 0, feb: 1, february: 1, mar: 2, march: 2,
+    apr: 3, april: 3, may: 4, jun: 5, june: 5, jul: 6, july: 6,
+    aug: 7, august: 7, sep: 8, september: 8, oct: 9, october: 9,
+    nov: 10, november: 10, dec: 11, december: 11,
+  };
+  const monthYears = [
+    ...period.matchAll(/\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec)[.,\s]+(20\d{2})\b/gi),
+  ];
+  const years = [...period.matchAll(/\b(20\d{2})\b/g)];
+  const firstYear = years[0];
+  const lastYear = years[years.length - 1];
+  if (!firstYear || !lastYear) return null;
+
+  const startYear = Number(firstYear[1]);
+  const endYear = Number(lastYear[1]);
+  const firstMonthYear = monthYears.find((date) => Number(date[2]) === startYear);
+  const lastMonthYear = [...monthYears].reverse().find((date) => Number(date[2]) === endYear);
+  const start = firstNumericDate
+    ? parseNumericDate(firstNumericDate)
+    : firstMonthYear
+      ? { year: startYear, month: monthNames[firstMonthYear[1].toLowerCase()] }
+      : { year: startYear, month: 0 };
+  const end = lastNumericDate
+    ? parseNumericDate(lastNumericDate)
+    : lastMonthYear
+      ? { year: endYear, month: monthNames[lastMonthYear[1].toLowerCase()] }
+      : { year: endYear, month: 11 };
+  return { start, end };
+};
+
+const getProjectStatus = (period: string): Project["status"] => {
+  const range = projectDateRange(period);
+  if (!range || range.start.month < 0 || range.start.month > 11 || range.end.month < 0 || range.end.month > 11) return "review";
+
+  const now = new Date();
+  const currentMonth = now.getFullYear() * 12 + now.getMonth();
+  const startMonth = range.start.year * 12 + range.start.month;
+  const endMonth = range.end.year * 12 + range.end.month;
+  if (startMonth > endMonth) return "review";
+  if (currentMonth < startMonth) return "upcoming";
+  return currentMonth <= endMonth ? "scheduled" : "ended";
+};
+
 export const projects = projectRecords.map((project) => {
   const cv = cvProjectDetails.find(({ match }) => projectMatchText(project.title).includes(match));
-  return {
+  const details = {
     ...project,
     ...(cv ? { cvDescription: cv.description, value: cv.value, years: cv.years, outcomes: cv.outcomes } : {}),
+  };
+  return {
+    ...details,
+    status: getProjectStatus(details.years),
     id: project.title
       .normalize("NFKD")
       .toLowerCase()

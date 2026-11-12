@@ -27,4 +27,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .animate-marquee { animation: none !important; transform: none !important; width: auto !important; flex-wrap: wrap !important; white-space: normal !important; }
 }

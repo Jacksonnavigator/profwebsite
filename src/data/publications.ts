@@ -19,12 +19,33 @@ export const publications = (raw as Publication[])
   .slice()
   .sort((a, b) => b.year - a.year);
 export function bibtex(records: Publication[]) {
-  const escape = (value: string) =>
-    value.replace(/\\/g, "\\textbackslash{}").replace(/[{}]/g, (c) => `\\${c}`);
+  const escape = (value: string) => value.replace(/[\\{}#$%&_~^]/g, (character) => ({
+    "\\": "\\textbackslash{}",
+    "{": "\\{",
+    "}": "\\}",
+    "#": "\\#",
+    "$": "\\$",
+    "%": "\\%",
+    "&": "\\&",
+    "_": "\\_",
+    "~": "\\textasciitilde{}",
+    "^": "\\textasciicircum{}",
+  })[character] ?? character);
   return records
-    .map(
-      (p) =>
-        `@${p.type === "Journal article" ? "article" : "misc"}{${p.id},\n  title = {${escape(p.title)}},\n  author = {${escape(p.authors)}},\n  year = {${p.year}},\n  note = {${escape(p.venue)}}${p.doi ? `,\n  doi = {${p.doi}}` : ""}\n}`,
-    )
+    .map((p) => {
+      const type = p.type === "Journal article" ? "article"
+        : p.type === "Conference paper" ? "inproceedings"
+          : p.type === "Book chapter" ? "incollection" : "misc";
+      const venueField = type === "article" ? "journal" : type === "inproceedings" || type === "incollection" ? "booktitle" : "note";
+      const fields = [
+        `  title = {${escape(p.title)}}`,
+        `  author = {${escape(p.authors.replace(/,?\s*&\s*/g, " and ").replace(/,\s+(?=[A-Z][A-Z-]+,\s)/g, " and "))}}`,
+        `  year = {${p.year}}`,
+        ...(p.venue ? [`  ${venueField} = {${escape(p.venue)}}`] : []),
+        ...(p.doi ? [`  doi = {${p.doi}}`] : []),
+        ...(p.url ? [`  url = {${escape(p.url)}}`] : []),
+      ];
+      return `@${type}{${p.id},\n${fields.join(",\n")}\n}`;
+    })
     .join("\n\n");
 }

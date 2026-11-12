@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, Images, X } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, ExternalLink, Images, X } from "lucide-react";
 import { projectPhotos } from "../data/projectPhotos";
 import { projects } from "../data/site";
 
@@ -9,6 +9,7 @@ export default function ProjectDetail() {
   const project = projects.find((item) => item.id === projectId);
   const album = useMemo(() => project ? projectPhotos[project.id ?? ""] ?? [] : [], [project?.id]);
   const [activePhoto, setActivePhoto] = useState(0);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [lightboxPhoto, setLightboxPhoto] = useState<number | null>(null);
   const figureRefs = useRef<(HTMLElement | null)[]>([]);
   const photoButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -68,7 +69,11 @@ export default function ProjectDetail() {
         <div>
           <h1 className="text-3xl font-semibold text-ink">Project not found</h1>
           <p className="mt-3 text-slate-600">This project may have moved or the link may be incorrect.</p>
-          <Link to="/projects" className="btn-solar mt-7">Browse all projects</Link>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            <Link to="/projects" className="btn-solar">Browse all projects</Link>
+            <Link to="/publications" className="btn-outline">Publications</Link>
+            <Link to="/contact" className="btn-outline">Contact</Link>
+          </div>
         </div>
       </section>
     );
@@ -78,7 +83,8 @@ export default function ProjectDetail() {
   const goToPhoto = (index: number) => {
     const target = Math.max(0, Math.min(index, album.length - 1));
     setActivePhoto(target);
-    figureRefs.current[target]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (target >= 9) setShowAllPhotos(true);
+    requestAnimationFrame(() => figureRefs.current[target]?.scrollIntoView({ behavior: "smooth", block: "center" }));
   };
   const openLightbox = (index: number) => {
     openerPhotoRef.current = index;
@@ -98,8 +104,8 @@ export default function ProjectDetail() {
             <ArrowLeft size={17} aria-hidden="true" /> All projects
           </Link>
           <div className="mt-8 max-w-4xl">
-            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${project.running ? "bg-solar-100 text-solar-600" : "bg-white/15 text-white"}`}>
-              {project.running ? "Running now" : "Completed"}
+            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${project.status === "scheduled" || project.status === "upcoming" ? "bg-solar-100 text-solar-600" : project.status === "ended" ? "bg-white/15 text-white" : "bg-amber-100 text-amber-800"}`}>
+              {project.status === "upcoming" ? "Upcoming" : project.status === "scheduled" ? "Within planned dates" : project.status === "ended" ? "Schedule ended" : "Dates to review"}
             </span>
             <h1 className="mt-5 text-3xl font-semibold leading-tight sm:text-5xl">{project.title}</h1>
             <p className="mt-4 text-lg text-white/70">{project.years}</p>
@@ -118,6 +124,7 @@ export default function ProjectDetail() {
               <div><dt className="text-sm text-slate-500">Role</dt><dd className="mt-1 font-semibold text-ink">{project.role}</dd></div>
               <div><dt className="text-sm text-slate-500">Period</dt><dd className="mt-1 font-semibold text-ink">{project.years}</dd></div>
             </dl>
+            <a href="https://nm-aist.ac.tz/teams/prof-thomas-kivevele/" target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:text-solar-600">See selected project records on the NM-AIST profile <ExternalLink size={14} aria-hidden="true" /></a>
             {album.length > 0 && (
               <div className="mt-7 border-t border-slate-200 pt-6">
                 <div className="flex items-center justify-between gap-3">
@@ -145,7 +152,7 @@ export default function ProjectDetail() {
               <h2 id="project-outcomes-title" className="mt-3 text-3xl font-semibold text-ink">Outcomes and activities</h2>
               {project.cvDescription && (
                 <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 leading-relaxed text-slate-700">
-                  <h3 className="mb-2 font-semibold text-ink">Project description from the CV</h3>
+                  <h3 className="mb-2 font-semibold text-ink">Project brief</h3>
                   <p>{expandedDescription}</p>
                 </div>
               )}
@@ -161,21 +168,22 @@ export default function ProjectDetail() {
             <section aria-labelledby="project-photos-title" className="mt-14">
               <div className="flex items-center gap-3 text-teal-700"><Images size={20} aria-hidden="true" /><p className="text-sm font-bold uppercase tracking-[0.16em]">Project gallery</p></div>
               <h2 id="project-photos-title" className="mt-3 text-3xl font-semibold text-ink">Project photo album</h2>
-              {album.length > 0 && <p className="mt-2 text-sm text-slate-500">{album.length} photographs from the supplied project folder</p>}
+              {album.length > 0 && <p className="mt-2 text-sm text-slate-500">Browse {album.length} project photographs. Select a photo to view it full screen.</p>}
               {album.length ? (
                 <div className={`mt-6 grid gap-4 ${album.length > 2 ? "sm:grid-cols-2 xl:grid-cols-3" : "sm:grid-cols-2"}`}>
-                  {album.map(({ photo, caption }, index) => (
+                  {album.slice(0, showAllPhotos ? album.length : 9).map(({ photo, caption }, index) => (
                     <figure key={photo.src(960)} id={`project-photo-${index}`} data-photo-index={index} ref={(node) => { figureRefs.current[index] = node; }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
-                      <button ref={(node) => { photoButtonRefs.current[index] = node; }} type="button" onClick={() => openLightbox(index)} aria-label={`View photo ${index + 1} full screen`} className="group relative block w-full cursor-zoom-in bg-slate-200 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-teal-500">
+                      <button ref={(node) => { photoButtonRefs.current[index] = node; }} type="button" onClick={() => openLightbox(index)} aria-label={`View full-screen photo ${index + 1}: ${photo.alt}`} className="group relative block w-full cursor-zoom-in bg-slate-200 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-teal-500">
                         <img src={photo.src(960)} srcSet={`${photo.src(480)} 480w, ${photo.src(960)} 960w`} sizes="(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw" alt={photo.alt} className="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" style={{ objectPosition: photo.position }} loading="lazy" decoding="async" />
                       </button>
-                      {caption && <figcaption className="px-4 py-3 text-sm leading-relaxed text-slate-600">{caption}</figcaption>}
+                      <figcaption className="px-4 py-3 text-sm leading-relaxed text-slate-600">{caption || `Research documentation: ${project.title}`}</figcaption>
                     </figure>
                   ))}
                 </div>
               ) : (
                 <p className="mt-5 rounded-2xl border border-dashed border-slate-300 bg-white p-6 leading-relaxed text-slate-600">No project photos are available here yet. Please check back later to see them.</p>
               )}
+              {album.length > 9 && <button type="button" onClick={() => setShowAllPhotos((shown) => !shown)} className="btn-outline mt-6">{showAllPhotos ? "Show fewer photos" : `Show all ${album.length} photos`}</button>}
               <Link to="/projects" className="mt-8 inline-flex min-h-11 items-center gap-2 font-semibold text-teal-700 hover:text-solar-600"><ArrowLeft size={17} aria-hidden="true" /> Back to all projects</Link>
             </section>
           </div>

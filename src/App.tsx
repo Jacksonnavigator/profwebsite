@@ -18,9 +18,12 @@ function NotFound() {
       <div>
         <h1 className="text-5xl font-semibold">This page does not exist</h1>
         <p className="mt-4 text-white/75">The link may be old or mistyped.</p>
-        <Link to="/" className="btn-solar mt-8">
-          Go to the home page
-        </Link>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link to="/" className="btn-solar">Home</Link>
+          <Link to="/projects" className="btn border border-white/60 text-white hover:bg-white/10">Projects</Link>
+          <Link to="/publications" className="btn border border-white/60 text-white hover:bg-white/10">Publications</Link>
+          <Link to="/contact" className="btn border border-white/60 text-white hover:bg-white/10">Contact</Link>
+        </div>
       </div>
     </section>
   );

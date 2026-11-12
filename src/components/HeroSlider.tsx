@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import Photo from "./Photo";
@@ -12,23 +12,29 @@ export default function HeroSlider() {
   const [role, setRole] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const reduced = useRef(
-    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const go = useCallback((i: number) => setIndex((i + heroSlides.length) % heroSlides.length), []);
 
   useEffect(() => {
-    if (paused || hovered || focused || reduced.current) return;
+    if (paused || hovered || focused || reduced) return;
     const t = window.setTimeout(() => go(index + 1), SLIDE_MS);
     return () => window.clearTimeout(t);
-  }, [index, paused, hovered, focused, go]);
+  }, [index, paused, hovered, focused, reduced, go]);
 
   useEffect(() => {
-    if (reduced.current) return;
-    const t = window.setInterval(() => setRole((r) => (r + 1) % heroRoles.length), 2600);
-    return () => window.clearInterval(t);
-  }, []);
+    if (paused || hovered || focused || reduced) return;
+    const t = window.setTimeout(() => setRole((r) => (r + 1) % heroRoles.length), 2600);
+    return () => window.clearTimeout(t);
+  }, [role, paused, hovered, focused, reduced]);
 
   const slide = heroSlides[index];
 
@@ -62,7 +68,7 @@ export default function HeroSlider() {
         <div className="max-w-3xl">
           <h1 className="animate-rise font-display text-[2.5rem] font-semibold leading-[1.02] tracking-tight text-white [animation-delay:120ms] sm:text-6xl lg:text-7xl">
             <span className="block">Powering Africa as</span>
-            <span className="relative block h-[1.1em] overflow-hidden" aria-live="polite">
+            <span className="relative block h-[1.1em] overflow-hidden">
               {heroRoles.map((r, i) => (
                 <span
                   key={r}
@@ -93,9 +99,9 @@ export default function HeroSlider() {
       </div>
 
       {/* Slide caption and controls */}
-      <div className="absolute inset-x-0 bottom-0 hidden md:block">
-        <div className="container-site flex items-end justify-between gap-6 pb-8">
-          <div className="flex gap-2" role="group" aria-label="Choose a slide">
+      <div className="absolute inset-x-0 bottom-0">
+        <div className="container-site flex items-center justify-center gap-3 pb-6 md:items-end md:justify-between md:gap-6 md:pb-8">
+          <div className="flex gap-1 md:gap-2" role="group" aria-label="Choose a slide">
             {heroSlides.map((s, i) => (
               <button
                 key={s.title}
@@ -103,7 +109,7 @@ export default function HeroSlider() {
                 onClick={() => go(i)}
                 aria-label={`Show slide ${i + 1}: ${s.title}`}
                 aria-current={i === index}
-                className="group flex h-11 w-14 items-center"
+                className="group flex h-11 w-7 items-center md:w-14"
               >
                 <span className="relative block h-1.5 w-full overflow-hidden rounded-full bg-white/25 group-hover:bg-white/40">
                 <span
@@ -117,8 +123,8 @@ export default function HeroSlider() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="max-w-xs rounded-2xl border border-white/15 bg-ink/90 px-5 py-4 text-right">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="hidden max-w-xs rounded-2xl border border-white/15 bg-ink/90 px-5 py-4 text-right md:block">
               <p className="font-display text-lg font-semibold text-white">{slide.title}</p>
               <p className="mt-1 text-sm text-white/70">{slide.caption}</p>
             </div>
@@ -126,7 +132,7 @@ export default function HeroSlider() {
               <button type="button" onClick={() => go(index - 1)} aria-label="Previous slide" className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white hover:bg-white hover:text-ink">
                 <ChevronLeft size={20} />
               </button>
-              <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? "Play slideshow" : "Pause slideshow"} className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white hover:bg-white hover:text-ink">
+              <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? "Play slideshow" : "Pause slideshow"} aria-pressed={paused} className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white hover:bg-white hover:text-ink">
                 {paused ? <Play size={18} /> : <Pause size={18} />}
               </button>
               <button type="button" onClick={() => go(index + 1)} aria-label="Next slide" className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white hover:bg-white hover:text-ink">
