@@ -167,7 +167,6 @@ His consultancies include energy-efficient irrigation for the
                 <li key={patent.number} className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
                   <p className="text-sm font-semibold text-solar-400">{patent.year} · {patent.number}</p>
                   <h3 className="mt-2 text-lg font-semibold leading-snug">{patent.title}</h3>
-                  <a href="https://bos.brela.go.tz/" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white underline decoration-solar underline-offset-4 hover:text-solar-400">Look up this patent number in the BRELA portal <ExternalLink size={14} aria-hidden="true" /></a>
                 </li>
               ))}
             </ol>

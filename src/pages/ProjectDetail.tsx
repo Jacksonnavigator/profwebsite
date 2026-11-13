@@ -171,12 +171,11 @@ export default function ProjectDetail() {
               {album.length > 0 && <p className="mt-2 text-sm text-slate-500">Browse {album.length} project photographs. Select a photo to view it full screen.</p>}
               {album.length ? (
                 <div className={`mt-6 grid gap-4 ${album.length > 2 ? "sm:grid-cols-2 xl:grid-cols-3" : "sm:grid-cols-2"}`}>
-                  {album.slice(0, showAllPhotos ? album.length : 9).map(({ photo, caption }, index) => (
+                  {album.slice(0, showAllPhotos ? album.length : 9).map(({ photo }, index) => (
                     <figure key={photo.src(960)} id={`project-photo-${index}`} data-photo-index={index} ref={(node) => { figureRefs.current[index] = node; }} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
                       <button ref={(node) => { photoButtonRefs.current[index] = node; }} type="button" onClick={() => openLightbox(index)} aria-label={`View full-screen photo ${index + 1}: ${photo.alt}`} className="group relative block w-full cursor-zoom-in bg-slate-200 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-teal-500">
                         <img src={photo.src(960)} srcSet={`${photo.src(480)} 480w, ${photo.src(960)} 960w`} sizes="(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw" alt={photo.alt} className="h-64 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" style={{ objectPosition: photo.position }} loading="lazy" decoding="async" />
                       </button>
-                      <figcaption className="px-4 py-3 text-sm leading-relaxed text-slate-600">{caption || `Research documentation: ${project.title}`}</figcaption>
                     </figure>
                   ))}
                 </div>
