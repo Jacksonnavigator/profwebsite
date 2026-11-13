@@ -24,7 +24,7 @@ export default function About() {
         <div className="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <div className="overflow-hidden rounded-[2rem] bg-teal-600 shadow-lift">
-              <Photo photo={photos.technaiOsirisInstrument} width={700} className="aspect-[4/5] w-full object-[50%_20%]" />
+              <Photo photo={photos.worldScienceForum} width={700} className="aspect-[4/5] w-full object-[50%_20%]" />
             </div>
             <ul className="mt-6 space-y-3">
               {["Registered Professional Engineer, ERB PE10185", "ARISE Fellow, African Academy of Sciences", "Member, Tanzania Renewable Energy Association", "Editorial board, Journal of Automotive Experiences"].map((c) => (

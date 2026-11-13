@@ -6,9 +6,9 @@ const authentic = (name: string) => (width: number) => `/images/authentic/${name
 export const photos = {
   portrait: { src: authentic("portrait"), alt: "Seated professional portrait" },
   worldScienceForum: {
-    src: () => "/images/authentic/world-science-forum-welcome.png",
-    alt: "Thomas Kivevele beside the World Science Forum 2022 welcome banner in Cape Town",
-    position: "center 20%",
+    src: () => "/Photo_Kivevele.jpg",
+    alt: "Thomas Kivevele",
+    position: "center",
   },
   technaiOsirisInstrument: {
     src: () => "/images/authentic/technai-osiris-instrument.png",
