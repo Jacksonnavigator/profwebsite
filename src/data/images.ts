@@ -59,6 +59,7 @@ export const photos = {
   },
   campus: { src: authentic("PHOTO-032"), alt: "Thomas Kivevele outside the NM-AIST entrance", position: "center", credit: "NM-AIST · supplied photograph" },
   presentation: { src: authentic("PHOTO-046"), alt: "A speaker presenting with an outstretched hand", position: "55% center", credit: "Presentation · supplied photograph" },
+  researchPartnership: { src: authentic("PHOTO-093"), alt: "Thomas Kivevele exchanging a gift with a research partner", position: "50% center", credit: "Research partnership · supplied photograph" },
   solarBiogasSite: { src: authentic("solar-biogas-site"), alt: "Solar-biogas hybrid dryer installation with solar collector at the NM-AIST site", position: "50% center" },
   heatPumpSamples: { src: authentic("heatpump-samples"), alt: "Packaged dried fruit slices from the solar-assisted heat-pump dryer project", position: "center" },
   solarBiogasSecond: { src: authentic("solar-biogas-second"), alt: "Solar drying cabinet, collector and biogas digester at NM-AIST", position: "50% center" },

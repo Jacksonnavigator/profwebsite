@@ -62,7 +62,7 @@ export default function HeroSlider() {
           />
         </div>
       ))}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/30 md:bg-gradient-to-r md:from-ink md:via-ink/75 md:to-ink/10" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/55 to-ink/20 md:bg-gradient-to-r md:from-ink/90 md:via-ink/55 md:to-ink/5" />
 
       <div className="container-site">
         <div className="max-w-3xl">

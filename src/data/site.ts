@@ -14,10 +14,10 @@ export const contact = {
 };
 
 export const heroSlides: { photo: Photo; title: string; caption: string }[] = [
-  { photo: photos.lab, title: "Research in practice", caption: "Laboratory research and sustainable energy engineering" },
   { photo: photos.presentation, title: "Sharing ideas", caption: "Presentations and knowledge exchange" },
-  { photo: photos.demonstration, title: "Innovation in the field", caption: "Solar–biogas dryer · hands-on equipment demonstration" },
-  { photo: photos.campus, title: "Rooted in Arusha", caption: "Nelson Mandela African Institution of Science and Technology" },
+  { photo: photos.lab, title: "Research in practice", caption: "Laboratory research and sustainable energy engineering" },
+  { photo: photos.solarFarm, title: "Clean energy in practice", caption: "Solar power for a sustainable energy future" },
+  { photo: photos.researchPartnership, title: "Research partnerships", caption: "Sharing ideas across research partnerships" },
 ];
 
 export const heroRoles = ["Energy Engineer", "Innovator", "Research Leader"];
