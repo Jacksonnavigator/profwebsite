@@ -164,20 +164,34 @@ export default function Home() {
         <Photo photo={photos.mountainTrees} width={1800} className="absolute inset-0 -z-20 h-full w-full opacity-25" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-teal-600 via-teal-600/90 to-teal-600/70" />
         <div className="container-site">
-          <p className="kicker text-solar-400">Recognition</p>
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-            {awards.map((a) => (
-              <li key={a.title} className="border-t-2 border-solar pt-5">
-                {a.image && <img src={a.image} alt={a.imageAlt} className="mb-5 aspect-[4/3] w-full rounded-xl object-cover object-center" loading="lazy" />}
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="kicker text-solar-400">Recognition</p>
+              <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">Awards and research milestones</h2>
+            </div>
+            <a href="https://nm-aist.ac.tz/teams/prof-thomas-kivevele/" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center self-start font-semibold text-white underline decoration-solar underline-offset-4 hover:text-solar-400 sm:self-auto">
+              NM-AIST staff profile <ArrowRight size={17} className="ml-2" aria-hidden="true" />
+            </a>
+          </div>
+          {awards[0] && (
+            <article className="mt-9 grid overflow-hidden rounded-3xl border border-white/20 bg-ink/20 shadow-lift md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              {awards[0].image && <img src={awards[0].image} alt={awards[0].imageAlt} className="h-64 w-full object-cover sm:h-80 md:h-full md:min-h-80" loading="lazy" />}
+              <div className="flex flex-col justify-center p-6 sm:p-9">
+                <p className="font-display text-2xl font-semibold text-solar-400">{awards[0].year}</p>
+                {awards[0].sourceUrl ? <a href={awards[0].sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-start gap-2 text-xl font-semibold leading-snug underline decoration-solar/70 underline-offset-4 hover:text-solar-400 sm:text-2xl">{awards[0].title}<ArrowRight size={18} className="mt-1 shrink-0" aria-hidden="true" /></a> : <h3 className="mt-2 text-xl font-semibold leading-snug sm:text-2xl">{awards[0].title}</h3>}
+                <p className="mt-3 text-base text-white/75">{awards[0].by}</p>
+              </div>
+            </article>
+          )}
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {awards.slice(1).map((a) => (
+              <li key={a.title} className="h-full rounded-2xl border border-white/20 bg-white/5 p-5 sm:p-6">
                 <p className="font-display text-2xl font-semibold text-solar-400">{a.year}</p>
-                {a.sourceUrl ? <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-start gap-2 text-lg font-semibold leading-snug underline decoration-solar/70 underline-offset-4 hover:text-solar-400">{a.title}<ArrowRight size={16} className="mt-1 shrink-0" aria-hidden="true" /></a> : <p className="mt-2 text-lg font-semibold leading-snug">{a.title}</p>}
-                <p className="mt-1 text-sm text-white/75">{a.by}</p>
+                {a.sourceUrl ? <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-start gap-2 text-lg font-semibold leading-snug underline decoration-solar/70 underline-offset-4 hover:text-solar-400">{a.title}<ArrowRight size={16} className="mt-1 shrink-0" aria-hidden="true" /></a> : <h3 className="mt-2 text-lg font-semibold leading-snug">{a.title}</h3>}
+                <p className="mt-2 text-sm leading-relaxed text-white/75">{a.by}</p>
               </li>
             ))}
           </ul>
-          <a href="https://nm-aist.ac.tz/teams/prof-thomas-kivevele/" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex min-h-11 items-center font-semibold text-white underline decoration-solar underline-offset-4 hover:text-solar-400">
-            View the NM-AIST staff profile <ArrowRight size={17} className="ml-2" aria-hidden="true" />
-          </a>
         </div>
         <div className="mt-16 overflow-hidden border-y border-white/15 py-6" aria-label="Funders and partners" onMouseEnter={() => setPartnersInteracting(true)} onMouseLeave={() => setPartnersInteracting(false)} onFocusCapture={() => setPartnersInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPartnersInteracting(false); }}>
           <div className="container-site mb-4 flex justify-end">
